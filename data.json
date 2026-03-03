@@ -1,0 +1,28 @@
+[
+    {
+        "fname": "SAYED",
+        "lname": "abdo",
+        "address": "qena",
+        "country": "Egypt",
+        "gender": "Male",
+        "skills": [
+            "PHP",
+            "MySQL"
+        ],
+        "username": "abdomohamr59@gmail.com",
+        "department": "OpenSource"
+    },
+    {
+        "fname": "mostafa",
+        "lname": "ismail",
+        "address": "elshikh masood",
+        "country": "Egypt",
+        "gender": "Female",
+        "skills": [
+            "PHP",
+            "MySQL"
+        ],
+        "username": "abdomohamr59@gmail.com",
+        "department": "OpenSource"
+    }
+]

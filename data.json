@@ -1,10 +1,10 @@
 [
     {
-        "fname": "SAYED",
-        "lname": "abdo",
-        "address": "qena",
+        "fname": "mostafa",
+        "lname": "ismail",
+        "address": "elshikh masood",
         "country": "Egypt",
-        "gender": "Male",
+        "gender": "Female",
         "skills": [
             "PHP",
             "MySQL"
@@ -13,13 +13,12 @@
         "department": "OpenSource"
     },
     {
-        "fname": "mostafa",
-        "lname": "ismail",
-        "address": "elshikh masood",
+        "fname": "Mohamed",
+        "lname": "sayed",
+        "address": "Qeft-Qine-egypt",
         "country": "Egypt",
-        "gender": "Female",
+        "gender": "Male",
         "skills": [
-            "PHP",
             "MySQL"
         ],
         "username": "abdomohamr59@gmail.com",

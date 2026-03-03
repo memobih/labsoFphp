@@ -1,5 +1,7 @@
 <?php
-$data = json_decode(file_get_contents("data.json"), true);
+include "db.php";
+
+$result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
 ?>
 
 <!DOCTYPE html>
@@ -7,8 +9,6 @@ $data = json_decode(file_get_contents("data.json"), true);
 <head>
     <meta charset="UTF-8">
     <title>All Users</title>
-
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -17,12 +17,11 @@ $data = json_decode(file_get_contents("data.json"), true);
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">All Registered Users</h2>
-        <a href="regitration.php" class="btn btn-primary">+ Add New User</a>
+        <a href="registration.php" class="btn btn-primary">+ Add New User</a>
     </div>
 
     <div class="card shadow">
         <div class="card-body">
-
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle text-center">
                     <thead class="table-dark">
@@ -34,22 +33,22 @@ $data = json_decode(file_get_contents("data.json"), true);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if(!empty($data)): ?>
-                            <?php foreach($data as $index => $user): ?>
+                        <?php if(mysqli_num_rows($result) > 0): ?>
+                            <?php while($user = mysqli_fetch_assoc($result)): ?>
                             <tr>
-                                <td><?= $index ?></td>
-                                <td><?= $user['fname'] . " " . $user['lname'] ?></td>
-                                <td><?= $user['country'] ?></td>
+                                <td><?= $user['id'] ?></td>
+                                <td><?= htmlspecialchars($user['fname'] . " " . $user['lname']) ?></td>
+                                <td><?= htmlspecialchars($user['country']) ?></td>
                                 <td>
-                                    <a href="view.php?id=<?= $index ?>" class="btn btn-info btn-sm">View</a>
-                                    <a href="edit.php?id=<?= $index ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="delete.php?id=<?= $index ?>" class="btn btn-danger btn-sm"
+                                    <a href="view.php?id=<?= $user['id'] ?>" class="btn btn-info btn-sm">View</a>
+                                    <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="delete.php?id=<?= $user['id'] ?>" class="btn btn-danger btn-sm"
                                        onclick="return confirm('Are you sure you want to delete this user?');">
                                        Delete
                                     </a>
                                 </td>
                             </tr>
-                            <?php endforeach; ?>
+                            <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="4" class="text-muted">No users found.</td>
@@ -58,13 +57,11 @@ $data = json_decode(file_get_contents("data.json"), true);
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

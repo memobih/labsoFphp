@@ -1,29 +1,26 @@
 <?php
+include "db.php";
 
-function redirect($url){
-    header("Location: $url");
+if($_SERVER["REQUEST_METHOD"] != "POST"){
+    header("Location: registration.php");
     exit;
 }
 
-if($_SERVER["REQUEST_METHOD"] != "POST"){
-    redirect("registration.php");
-}
+$fname      = $_POST['fname'];
+$lname      = $_POST['lname'];
+$address    = $_POST['address'];
+$country    = $_POST['country'];
+$gender     = $_POST['gender'];
+$skills     = isset($_POST['skills']) ? implode(",", $_POST['skills']) : "";
+$username   = $_POST['username'];
+$department = $_POST['department'];
 
-$data = json_decode(file_get_contents("data.json"), true);
+$sql = "INSERT INTO users 
+(fname, lname, address, country, gender, skills, username, department)
+VALUES
+('$fname', '$lname', '$address', '$country', '$gender', '$skills', '$username', '$department')";
 
-$newUser = [
-    "fname"     => $_POST['fname'] ?? '',
-    "lname"     => $_POST['lname'] ?? '',
-    "address"   => $_POST['address'] ?? '',
-    "country"   => $_POST['country'] ?? '',
-    "gender"    => $_POST['gender'] ?? '',
-    "skills"    => $_POST['skills'] ?? [],
-    "username"  => $_POST['username'] ?? '',
-    "department"=> $_POST['department'] ?? ''
-];
+mysqli_query($conn, $sql);
 
-$data[] = $newUser;
-
-file_put_contents("data.json", json_encode($data, JSON_PRETTY_PRINT));
-
-redirect("list.php");
+header("Location: list.php");
+exit;

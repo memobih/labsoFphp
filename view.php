@@ -1,8 +1,10 @@
 <?php
-$data = json_decode(file_get_contents("data.json"), true);
+include "db.php"; 
+
 $id = $_GET['id'];
 
-$user = $data[$id];
+$result = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
+$user = mysqli_fetch_assoc($result);
 ?>
 
 <!DOCTYPE html>
@@ -31,37 +33,37 @@ $user = $data[$id];
 
                         <li class="list-group-item">
                             <strong>Name:</strong>
-                            <?= $user['fname'] . " " . $user['lname'] ?>
+                            <?= htmlspecialchars($user['fname'] . " " . $user['lname']) ?>
                         </li>
 
                         <li class="list-group-item">
                             <strong>Address:</strong>
-                            <?= $user['address'] ?>
+                            <?= htmlspecialchars($user['address']) ?>
                         </li>
 
                         <li class="list-group-item">
                             <strong>Country:</strong>
-                            <?= $user['country'] ?>
+                            <?= htmlspecialchars($user['country']) ?>
                         </li>
 
                         <li class="list-group-item">
                             <strong>Gender:</strong>
-                            <?= $user['gender'] ?>
+                            <?= htmlspecialchars($user['gender']) ?>
                         </li>
 
                         <li class="list-group-item">
                             <strong>Skills:</strong>
-                            <?= !empty($user['skills']) ? implode(", ", $user['skills']) : "No skills selected" ?>
+                            <?= !empty($user['skills']) ? htmlspecialchars($user['skills']) : "No skills selected" ?>
                         </li>
 
                         <li class="list-group-item">
                             <strong>Username:</strong>
-                            <?= $user['username'] ?>
+                            <?= htmlspecialchars($user['username']) ?>
                         </li>
 
                         <li class="list-group-item">
                             <strong>Department:</strong>
-                            <?= $user['department'] ?>
+                            <?= htmlspecialchars($user['department']) ?>
                         </li>
 
                     </ul>
@@ -77,7 +79,6 @@ $user = $data[$id];
     </div>
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

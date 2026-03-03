@@ -1,11 +1,9 @@
 <?php
-$data = json_decode(file_get_contents("data.json"), true);
+include "db.php";
 
 $id = $_GET['id'];
-unset($data[$id]);
-$data = array_values($data);
 
-file_put_contents("data.json", json_encode($data, JSON_PRETTY_PRINT));
+mysqli_query($conn, "DELETE FROM users WHERE id=$id");
 
 header("Location: list.php");
 exit;

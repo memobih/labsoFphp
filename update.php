@@ -1,16 +1,16 @@
 <?php
-
-$data = json_decode(file_get_contents("data.json"), true);
+include "db.php";
 
 $id = $_POST['id'];
+$fname = $_POST['fname'];
+$lname = $_POST['lname'];
+$country = $_POST['country'];
 
-$data[$id]['fname'] = $_POST['fname'];
-$data[$id]['lname'] = $_POST['lname'];
-$data[$id]['address'] = $_POST['address'];
-$data[$id]['country'] = $_POST['country'];
-$data[$id]['username'] = $_POST['username'];
+$sql = "UPDATE users 
+SET fname='$fname', lname='$lname', country='$country'
+WHERE id=$id";
 
-file_put_contents("data.json", json_encode($data, JSON_PRETTY_PRINT));
+mysqli_query($conn, $sql);
 
 header("Location: list.php");
 exit;

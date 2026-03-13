@@ -1,11 +1,3 @@
-<?php
-require_once "auth.php";
-requireLogin();
-include "db.php";
-
-$result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,10 +7,10 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
 </head>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="list.php text-primary">ITI System</a>
+        <a class="navbar-brand fw-bold" href="index.php?controller=user&action=index">ITI System</a>
         <div class="d-flex align-items-center">
-            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars(getLoggedInUser()) ?></strong></span>
-            <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
+            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars($loggedInUser) ?></strong></span>
+            <a href="index.php?controller=auth&action=logout" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
     </div>
 </nav>
@@ -26,7 +18,7 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark">All Registered Users</h2>
-        <a href="regitration.php" class="btn btn-primary d-flex align-items-center">
+        <a href="index.php?controller=auth&action=register" class="btn btn-primary d-flex align-items-center">
             <span class="me-2">+</span> Add New User
         </a>
     </div>
@@ -45,10 +37,10 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if(mysqli_num_rows($result) > 0): ?>
-                            <?php while($user = mysqli_fetch_assoc($result)): ?>
+                        <?php if(count($users) > 0): ?>
+                            <?php foreach($users as $user): ?>
                             <tr>
-                                <td><?= $user['id'] ?></td>
+                                <td><?= htmlspecialchars($user['id']) ?></td>
                                 <td>
                                     <?php if ($user['profile_pic']): ?>
                                         <img src="<?= htmlspecialchars($user['profile_pic']) ?>" class="rounded-circle" width="40" height="40" style="object-fit: cover; border: 2px solid #ddd;">
@@ -59,15 +51,15 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id ASC");
                                 <td><?= htmlspecialchars($user['fname'] . " " . $user['lname']) ?></td>
                                 <td><?= htmlspecialchars($user['country']) ?></td>
                                 <td>
-                                    <a href="view.php?id=<?= $user['id'] ?>" class="btn btn-info btn-sm">View</a>
-                                    <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="delete.php?id=<?= $user['id'] ?>" class="btn btn-danger btn-sm"
+                                    <a href="index.php?controller=user&action=show&id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-info btn-sm">View</a>
+                                    <a href="index.php?controller=user&action=edit&id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="index.php?controller=user&action=delete&id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-danger btn-sm"
                                        onclick="return confirm('Are you sure you want to delete this user?');">
                                        Delete
                                     </a>
                                 </td>
                             </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
                                 <td colspan="5" class="text-muted">No users found.</td>

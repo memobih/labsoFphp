@@ -1,18 +1,3 @@
-<?php
-require_once "auth.php";
-requireLogin();
-include "db.php";
-
-$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$result = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
-$user = mysqli_fetch_assoc($result);
-
-if (!$user) {
-    echo "User not found!";
-    exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,10 +9,10 @@ if (!$user) {
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="list.php text-primary">ITI System</a>
+        <a class="navbar-brand fw-bold" href="index.php?controller=user&action=index">ITI System</a>
         <div class="d-flex align-items-center">
-            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars(getLoggedInUser()) ?></strong></span>
-            <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
+            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars($loggedInUser) ?></strong></span>
+            <a href="index.php?controller=auth&action=logout" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
     </div>
 </nav>
@@ -36,7 +21,7 @@ if (!$user) {
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="text-start mb-3">
-                <a href="list.php" class="text-decoration-none">&larr; Back to List</a>
+                <a href="index.php?controller=user&action=index" class="text-decoration-none">&larr; Back to List</a>
             </div>
 
             <div class="card-body text-center">
@@ -96,12 +81,11 @@ if (!$user) {
                 </div>
 
                 <div class="mt-4 text-center">
-                    <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-warning px-4">Edit Profile</a>
+                    <a href="index.php?controller=user&action=edit&id=<?= htmlspecialchars($user['id']) ?>" class="btn btn-warning px-4">Edit Profile</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

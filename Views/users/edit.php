@@ -1,12 +1,3 @@
-<?php
-require_once "auth.php";
-requireLogin();
-include "db.php";
-$id = (int)$_GET['id'];
-$result = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
-$user = mysqli_fetch_assoc($result);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,10 +9,10 @@ $user = mysqli_fetch_assoc($result);
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="list.php text-primary">ITI System</a>
+        <a class="navbar-brand fw-bold" href="index.php?controller=user&action=index">ITI System</a>
         <div class="d-flex align-items-center">
-            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars(getLoggedInUser()) ?></strong></span>
-            <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
+            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars($loggedInUser) ?></strong></span>
+            <a href="index.php?controller=auth&action=logout" class="btn btn-outline-danger btn-sm">Logout</a>
         </div>
     </div>
 </nav>
@@ -30,7 +21,7 @@ $user = mysqli_fetch_assoc($result);
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="text-start mb-3">
-                <a href="list.php" class="text-decoration-none">&larr; Back to List</a>
+                <a href="index.php?controller=user&action=index" class="text-decoration-none">&larr; Back to List</a>
             </div>
 
             <div class="card shadow">
@@ -39,9 +30,9 @@ $user = mysqli_fetch_assoc($result);
                 </div>
 
                 <div class="card-body">
-                    <form action="update.php" method="POST" enctype="multipart/form-data">
+                    <form action="index.php?controller=user&action=edit&id=<?= htmlspecialchars($user['id']) ?>" method="POST" enctype="multipart/form-data">
 
-                        <input type="hidden" name="id" value="<?= $user['id'] ?>">
+                        <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -80,8 +71,20 @@ $user = mysqli_fetch_assoc($result);
                                    class="form-control" required>
                             <div class="invalid-feedback" id="username_error"></div>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Department</label>
+                            <input type="text" name="department" id="department"
+                                   value="<?= htmlspecialchars($user['department']) ?>" 
+                                   class="form-control" required>
+                        </div>
 
-                        <!-- Current Profile Pic -->
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" id="password"
+                                   class="form-control">
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label d-block">Profile Picture</label>
                             <?php if ($user['profile_pic']): ?>
@@ -92,7 +95,7 @@ $user = mysqli_fetch_assoc($result);
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="list.php" class="btn btn-secondary">Cancel</a>
+                            <a href="index.php?controller=user&action=index" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="btn btn-success">
                                 Update User
                             </button>

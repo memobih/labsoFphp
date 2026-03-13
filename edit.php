@@ -1,6 +1,8 @@
 <?php
+require_once "auth.php";
+requireLogin();
 include "db.php";
-$id = $_GET['id'];
+$id = (int)$_GET['id'];
 $result = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
 $user = mysqli_fetch_assoc($result);
 ?>
@@ -9,15 +11,27 @@ $user = mysqli_fetch_assoc($result);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit User</title>
-
+    <title>Edit User - ITI System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="list.php text-primary">ITI System</a>
+        <div class="d-flex align-items-center">
+            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars(getLoggedInUser()) ?></strong></span>
+            <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <div class="text-start mb-3">
+                <a href="list.php" class="text-decoration-none">&larr; Back to List</a>
+            </div>
 
             <div class="card shadow">
                 <div class="card-header bg-warning">
@@ -25,8 +39,7 @@ $user = mysqli_fetch_assoc($result);
                 </div>
 
                 <div class="card-body">
-
-                    <form action="update.php" method="POST">
+                    <form action="update.php" method="POST" enctype="multipart/form-data">
 
                         <input type="hidden" name="id" value="<?= $user['id'] ?>">
 
@@ -62,9 +75,20 @@ $user = mysqli_fetch_assoc($result);
 
                         <div class="mb-3">
                             <label class="form-label">Username</label>
-                            <input type="text" name="username" 
+                            <input type="text" name="username" id="username"
                                    value="<?= htmlspecialchars($user['username']) ?>" 
                                    class="form-control" required>
+                            <div class="invalid-feedback" id="username_error"></div>
+                        </div>
+
+                        <!-- Current Profile Pic -->
+                        <div class="mb-3">
+                            <label class="form-label d-block">Profile Picture</label>
+                            <?php if ($user['profile_pic']): ?>
+                                <img src="<?= htmlspecialchars($user['profile_pic']) ?>" class="rounded shadow-sm mb-2" width="80" height="80" style="object-fit: cover;">
+                            <?php endif; ?>
+                            <input type="file" name="profile_pic" id="profile_pic" class="form-control" accept="image/jpeg,image/png">
+                            <div class="invalid-feedback" id="profile_pic_error"></div>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
@@ -84,5 +108,6 @@ $user = mysqli_fetch_assoc($result);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="validation.js"></script>
 </body>
 </html>

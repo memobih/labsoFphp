@@ -1,14 +1,9 @@
-<?php
-require_once "auth.php";
-?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Registration - ITI System</title>
-
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -16,13 +11,13 @@ require_once "auth.php";
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="list.php text-primary">ITI System</a>
+        <a class="navbar-brand fw-bold" href="index.php?controller=user&action=index">ITI System</a>
         <div class="d-flex align-items-center">
-            <?php if (isLoggedIn()): ?>
-                <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars(getLoggedInUser()) ?></strong></span>
-                <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
+            <?php if (isset($_SESSION['user'])): ?>
+                <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars($_SESSION['user']) ?></strong></span>
+                <a href="index.php?controller=auth&action=logout" class="btn btn-outline-danger btn-sm">Logout</a>
             <?php else: ?>
-                <a href="login.php" class="btn btn-outline-light btn-sm">Login</a>
+                <a href="index.php?controller=auth&action=login" class="btn btn-outline-light btn-sm">Login</a>
             <?php endif; ?>
         </div>
     </div>
@@ -32,7 +27,7 @@ require_once "auth.php";
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="text-start mb-3">
-                    <a href="list.php" class="text-decoration-none">&larr; Back to List</a>
+                    <a href="index.php?controller=user&action=index" class="text-decoration-none">&larr; Back to List</a>
                 </div>
 
                 <div class="card shadow">
@@ -42,9 +37,8 @@ require_once "auth.php";
 
                     <div class="card-body">
 
-                        <form action="done.php" method="post" enctype="multipart/form-data">
+                        <form action="index.php?controller=auth&action=register" method="post" enctype="multipart/form-data">
 
-                            <!-- First & Last Name -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">First Name</label>
@@ -59,14 +53,12 @@ require_once "auth.php";
                                 </div>
                             </div>
 
-                            <!-- Address -->
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
                                 <textarea name="address" id="address" class="form-control" rows="3"></textarea>
                                 <div class="invalid-feedback" id="address_error"></div>
                             </div>
 
-                            <!-- Country -->
                             <div class="mb-3">
                                 <label class="form-label">Country</label>
                                 <select name="country" id="country" class="form-select">
@@ -77,7 +69,6 @@ require_once "auth.php";
                                 <div class="invalid-feedback" id="country_error"></div>
                             </div>
 
-                            <!-- Gender -->
                             <div class="mb-3">
                                 <label class="form-label d-block">Gender</label>
                                 <div class="form-check form-check-inline">
@@ -92,7 +83,6 @@ require_once "auth.php";
                                 </div>
                             </div>
 
-                            <!-- Skills -->
                             <div class="mb-3">
                                 <label class="form-label d-block">Skills</label>
                                 <div class="form-check form-check-inline">
@@ -120,7 +110,6 @@ require_once "auth.php";
                                 </div>
                             </div>
 
-                            <!-- Username & Password -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Username</label>
@@ -135,14 +124,12 @@ require_once "auth.php";
                                 </div>
                             </div>
 
-                            <!-- Department -->
                             <div class="mb-3">
                                 <label class="form-label">Department</label>
                                 <input type="text" name="department" id="department" value="OpenSource"
                                     class="form-control" readonly>
                             </div>
 
-                            <!-- Verification Code -->
                             <?php $code = rand(10000, 99999); ?>
 
                             <div class="alert alert-secondary">
@@ -156,7 +143,6 @@ require_once "auth.php";
                                 <input type="hidden" name="real_code" value="<?php echo $code; ?>">
                             </div>
 
-                            <!-- Buttons -->
                             <div class="d-flex justify-content-between">
                                 <button type="reset" class="btn btn-outline-secondary">Reset</button>
                                 <input type="hidden" name="MAX_FILE_SIZE" value="2097152">
@@ -178,7 +164,6 @@ require_once "auth.php";
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="validation.js"></script>
 

@@ -1,30 +1,3 @@
-<?php
-require_once "auth.php";
-include "db.php";
-
-$error = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
-
-    // In a real app, use password_verify and prepared statements
-    $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ss", $username, $password);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($user = mysqli_fetch_assoc($result)) {
-        $_SESSION['user'] = $user['username'];
-        header("Location: list.php");
-        exit;
-    } else {
-        $error = "Invalid username or password!";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -78,13 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="text-muted">Login to your account</p>
         </div>
         <div class="card-body p-4">
-            <?php if ($error): ?>
+            <?php if (!empty($error)): ?>
                 <div class="alert alert-danger">
-                    <?= $error ?>
+                    <?= htmlspecialchars($error) ?>
                 </div>
             <?php endif; ?>
 
-            <form method="POST">
+            <form action="index.php?controller=auth&action=login" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Username</label>
                     <input type="text" name="username" class="form-control" placeholder="Enter username" required>
@@ -98,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </form>
             <div class="text-center mt-3">
-                <small>Don't have an account? <a href="regitration.php" class="text-decoration-none"
+                <small>Don't have an account? <a href="index.php?controller=auth&action=register" class="text-decoration-none"
                         style="color: #764ba2;">Register here</a></small>
             </div>
         </div>

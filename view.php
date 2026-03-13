@@ -1,33 +1,58 @@
 <?php
-include "db.php"; 
+require_once "auth.php";
+requireLogin();
+include "db.php";
 
-$id = $_GET['id'];
-
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $result = mysqli_query($conn, "SELECT * FROM users WHERE id=$id");
 $user = mysqli_fetch_assoc($result);
+
+if (!$user) {
+    echo "User not found!";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Details</title>
-
-    <!-- Bootstrap 5 -->
+    <title>User Details - ITI System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="list.php text-primary">ITI System</a>
+        <div class="d-flex align-items-center">
+            <span class="text-light me-3">Welcome, <strong><?= htmlspecialchars(getLoggedInUser()) ?></strong></span>
+            <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <div class="text-start mb-3">
+                <a href="list.php" class="text-decoration-none">&larr; Back to List</a>
+            </div>
 
-            <div class="card shadow">
-                <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">User Details</h4>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <?php if ($user['profile_pic']): ?>
+                        <img src="<?= htmlspecialchars($user['profile_pic']) ?>" class="rounded-circle shadow" width="120"
+                            height="120" style="object-fit: cover; border: 4px solid #fff;">
+                    <?php else: ?>
+                        <div class="rounded-circle bg-secondary d-inline-block text-white shadow"
+                            style="width: 120px; height: 120px; line-height: 120px; font-size: 3rem;">?</div>
+                    <?php endif; ?>
                 </div>
-
-                <div class="card-body">
+                <h3 class="fw-bold"><?= htmlspecialchars($user['fname'] . " " . $user['lname']) ?></h3>
+                <p class="text-muted">@<?= htmlspecialchars($user['username']) ?></p>
+                <hr>
+                <div class="text-start">
 
                     <ul class="list-group list-group-flush">
 
@@ -68,18 +93,19 @@ $user = mysqli_fetch_assoc($result);
 
                     </ul>
 
-                    <div class="mt-4 text-end">
-                        <a href="list.php" class="btn btn-secondary">Back</a>
-                    </div>
+                </div>
 
+                <div class="mt-4 text-center">
+                    <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-warning px-4">Edit Profile</a>
                 </div>
             </div>
-
         </div>
     </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
